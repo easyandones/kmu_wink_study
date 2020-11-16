@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <title>WinkTalk</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div style="display: flex;">
+        <div class="title">
+            WinkTalk
+        </div>
+        <div class="ownerbox">
+            <div style="margin-right: 5px; font-size: 15pt;">사용자</div>
+            <input id="owner" placeholder="이름"></input>
+        </div>
+    </div>
+    <div id="chat_area">
+        <div id="loading">
+            불러오는 중...
+        </div>
+        <div class="chatbox" id="chat_default">
+            <div class="content" style="padding: 10px; font-size: 20pt; font-weight: bold;">
+                <!--내용-->
+            </div>
+            <hr style="margin: 0;">
+            <div class="user" style="padding: 10px; font-size: 12pt;">
+                <!--사용자-->
+            </div>
+        </div>
+    </div>
+    <div class="control">
+        <textarea id="chat" placeholder="메시지"></textarea>
+        <button id="send" onclick="addContent();">전송</button>
+    </div>
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .title {
+            padding: 10px;
+            font-size: 50pt;
+        }
+        .ownerbox {
+            display: flex;
+            margin: 30px 10px 10px auto;
+            padding: 10px;
+            width: fit-content;
+            height: 40px;
+            background-color: lightgray;
+            border-radius: 0.5rem;
+        }
+        #owner {
+            padding: 5px;
+            width: 100px;
+            height: 30px;
+            border: none;
+            font-size: 15pt;
+        }
+        #owner:focus {
+            outline: none;
+        }
+        #loading {
+            margin: 10px;
+            padding: 10px;
+            background-color: lightgray;
+            font-size: 15pt;
+            border-radius: 0.5rem;
+        }
+        .chatbox {
+            margin: 10px;
+            padding: 20px;
+            width: calc(100% - 60px);
+            height: 100px;
+            background-color: lightgray;
+            border-radius: 0.5rem;
+        }
+
+        .control {
+            position: fixed;
+            bottom: 0;
+            display: flex;
+            margin: 10px;
+            padding: 10px;
+            width: calc(100% - 40px);
+            background-color: lightgray;
+            box-shadow: 0 0.1rem 0.1rem 0.1rem rgba(58, 59, 69, 0.15);
+            border-radius: 0.5rem;
+        }
+
+        #chat {
+            width: calc(100% - 100px);
+            height: 60px;
+            padding: 5px;
+            border: none;
+            resize: none;
+            font-size: 15pt;
+        }
+
+        #chat:focus {
+            outline: none;
+        }
+
+        #send {
+            margin-left: 20px;
+            width: 80px;
+            height: 70px;
+        }
+
+        #chat_default {
+            display: none;
+        }
+    </style>
+
+    <script>
+        url = "http://ec2-52-78-131-251.ap-northeast-2.compute.amazonaws.com/feed/";
+        getContent();
+        function getContent() {
+            $.ajax({
+                method: "GET",
+                url: url
+            })
+                .done(function (data) {
+                    showContents(data);
+                    $("#loading").hide();
+                })
+                .fail(function (data) {
+                    alert("데이터를 불러오는 중 오류가 발생하였습니다.");
+                });
+        }
+        function showContents(data) {
+            for (i = 0; i < data.length; i++) {
+                showContent(data[i]);
+            }
+        }
+        function showContent(data) {
+            newChat = $("#chat_default").clone().removeAttr("id");
+            newChat.find(".content").text(data.content);
+            newChat.find(".user").text(data.owner);
+            $("#chat_area").after(newChat);
+        }
+        function addContent() {
+            owner = $("#owner").val();
+            content = $("#chat").val();
+            if (owner.length == 0) {
+                alert("이름을 입력하세요.");
+                return;
+            }
+            if (content.length == 0) {
+                alert("메시지를 입력하세요.");
+                return;
+            }
+            $("#chat").val("");
+            newChat = { owner: owner, content: content };
+            fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newChat)
+            });
+            showContent(newChat);
+        }
+    </script>
+</body>
+
+</html>
