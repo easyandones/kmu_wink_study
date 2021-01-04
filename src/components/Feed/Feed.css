@@ -1,0 +1,15 @@
+.Feed {
+	margin: 15px;
+	padding: 15px;
+	background-color: lightgray;
+	border-radius: 5px;
+	padding: 10px 15px;
+	color: white;
+	font-weight: bold;
+	border-width: 0;
+	cursor: pointer;
+}
+
+.Feed:hover {
+	opacity: 60%;
+}
