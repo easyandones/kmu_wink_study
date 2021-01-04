@@ -1,0 +1,7 @@
+.Textarea {
+	display: block;
+	border-radius: 10px;
+	padding:10px 15px;
+	resize: none;
+	outline: none;
+}
