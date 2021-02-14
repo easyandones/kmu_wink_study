@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
 import { Link, NavLink, Route, BrowserRouter as Router } from "react-router-dom"
@@ -7,6 +7,7 @@ import { Link, NavLink, Route, BrowserRouter as Router } from "react-router-dom"
 import MainPage from './pages/MainPage/MainPage.js';
 import TimelinePage from './pages/TimelinePage/TimelinePage.js';
 import MyPage from './pages/MyPage/MyPage.js';
+import LoginPage from './pages/LoginPage/LoginPage.js';
 
 class App extends Component {
   render() {
@@ -23,10 +24,14 @@ class App extends Component {
             <div>
               <NavLink exact to="/mypage">MyPage</NavLink>
             </div>
+            <div>
+              <NavLink exact to="/login">LoginPage</NavLink>
+            </div>
           </div>
           <Route exact path="/" component={MainPage} />
           <Route exact path="/timeline" component={TimelinePage} />
           <Route exact path="/mypage" component={MyPage} />
+          <Route exact path="/login" component={LoginPage} />
         </Router>
       </div>
     );

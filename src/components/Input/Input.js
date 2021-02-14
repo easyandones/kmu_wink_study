@@ -3,7 +3,7 @@ import React from 'react';
 import './Input.css';
 
 function Input(props) {
-	return <input className="Input" name={props.name} placeholder={props.placeholder} onChange={props.onChange} defaultValue={props.defaultValue} value={props.value} />;
+	return <input className="Input" name={props.name} placeholder={props.placeholder} onChange={props.onChange} defaultValue={props.defaultValue} value={props.value} type={props.type} />;
 }
 
 export default Input;

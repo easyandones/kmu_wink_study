@@ -8,7 +8,6 @@ import Button from '../Button/Button.js'
 
 export default function WriteFeed(props) {
     const [state, setState] = useState({
-        owner: "",
         content: ""
     });
 
@@ -21,21 +20,19 @@ export default function WriteFeed(props) {
     };
 
     const writeAction = e => {
-        if (state.owner == "" || state.content == "") {
+        if (state.content == "") {
             return;
         }
         props.writeFunction(state.owner, state.content);
         setState({
-            owner: "",
             content: ""
         });
     };
 
 	return (
 		<div className="WriteFeed">
-			<Input name="owner" placeholder="이름" value={state.owner} onChange={getValue}/>
 			<Textarea name="content" placeholder="내용" value={state.content} onChange={getValue}/>
-            <Button value="등록" onClick={writeAction}/>
+            <Button onClick={writeAction}>등록</Button>
 		</div>
 	);
 }

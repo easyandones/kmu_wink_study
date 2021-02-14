@@ -6,7 +6,7 @@ import WriteFeed from '../../components/WriteFeed/WriteFeed.js';
 import Timeline from '../../components/Timeline/Timeline.js';
 
 export default function TimelinePage(props) {
-    const API_SERVER = "http://ec2-52-78-131-251.ap-northeast-2.compute.amazonaws.com"
+    const API_SERVER = "http://ec2-52-78-131-251.ap-northeast-2.compute.amazonaws.com";
 
     const [feeds, setFeeds] = useState([]);
 
@@ -15,13 +15,15 @@ export default function TimelinePage(props) {
             const readResult = await fetch(
                 API_SERVER + "/feed/",
                 {
-                    method: "get"
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Token " + window.sessionStorage.getItem("token")
+                    }
                 }
             );
             const readJson = await readResult.json();
             const propsData = readJson.map(read => {
                 return {
-                    owner: read.owner,
                     content: read.content
                 };
             });
@@ -34,9 +36,10 @@ export default function TimelinePage(props) {
         await fetch(
             API_SERVER + "/feed/",
             {
-                method: "post",
+                method: "POST",
                 headers: {
-                    "Content-type": "application/json"
+                    "Content-type": "application/json",
+                    "Authorization": "Token " + window.sessionStorage.getItem("token")
                 },
                 body: JSON.stringify({
                     owner: owner,
