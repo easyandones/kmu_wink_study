@@ -18,13 +18,32 @@ export default function LoginPage(props) {
         const jsonData = await response.json();
         if (status == 200) {
             window.sessionStorage.setItem("token", jsonData.token);
-            window.sessionStorage.setItem("login", true);
+            window.sessionStorage.setItem("login", username);
             alert("로그인 완료");
             history.push("/timeline");
         }
         else {
             alert("로그인 실패\n\n" + JSON.stringify(jsonData));
         }
+    }
+
+    function tryLogout() {
+        window.sessionStorage.removeItem("token");
+        window.sessionStorage.removeItem("login");
+        alert("로그아웃 완료\n\n백엔드에 토큰 만료 API가 없어서 실제 토큰이 만료되지 않습니다.");
+        history.push("");
+    }
+
+    if (window.sessionStorage.getItem("login") != null) {
+        return (
+            <div className="LoginPage">
+                <div>
+                    로그아웃
+                </div>
+                <div>{window.sessionStorage.getItem("login")}님</div>
+                <Button onClick={tryLogout}>로그아웃</Button>
+            </div>
+        );
     }
 
     return (
